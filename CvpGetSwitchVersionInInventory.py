@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+# 'CvpGetSwitchVersionInInventory'
 # Basic Script to authenticate to Arista Cloudvision (CVP) and get all device version info and
 # build a CSV with that data. Note, that we are just using the inventory from CVP and the
 # username/password. Switches need to be accessible from the host you are running this script from
@@ -69,32 +69,6 @@ def get_inventory(url_prefix):
     response = session.get('%s/cvpservice/inventory/devices' % url_prefix)
     if response.json():
         return response.json()
-
-
-def saveConfigLocally( HOSTNAME, JSONDATA ):
-    '''
-    Take Config, which will be in json/text format
-    And then doctor this up so it can be saved as a file with the filename
-    in the format of hostname.conf
-    '''
-    #Get Config by netElementID (a.k.a. systemMacAddress)
-    rawconfig=JSONDATA['output']
-
-    # If there was an error, then function will have returned False.
-    # else, we'll assume all is well and create the file.
-    if rawconfig != False:
-        filename = HOSTNAME+'.conf'
-        print ("Creating configuration file  %s " % filename)
-        with open( filename, 'w') as fh:
-            for x in rawconfig:
-                fh.write(x)
-        fh.close()
-    else:
-        return False
-
-def getDeviceConfig ( url_prefix,ID ):
-    config = session.get('%s/cvpservice/inventory/getInventoryConfiguration.do?netElementId=%s' % (url_prefix, ID))
-    return config.json()
 
 def main():
     args = build_arg_parser()
